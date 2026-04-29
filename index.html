@@ -37,6 +37,11 @@
         .option-btn { background: #ff0000; border: none; color: #fff; padding: 20px; width: 100%; max-width: 300px; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 1.1rem; text-transform: uppercase; }
         .back-btn-report { position: absolute; top: 15px; left: 15px; background: none; border: 1px solid #333; color: #666; padding: 5px 10px; border-radius: 4px; }
         .hidden { display: none !important; }
+
+        /* Estilos nuevos inyectados sin dañar lo anterior */
+        .report-input { background: #111; border: 1px solid #333; color: #fff; padding: 10px; border-radius: 5px; width: 100%; max-width: 300px; margin-bottom: 10px; font-size: 0.9rem; resize: none; }
+        .btn-group { display: flex; flex-wrap: wrap; gap: 5px; justify-content: center; max-width: 300px; margin-bottom: 15px; }
+        .quick-tag { background: #222; border: 1px solid #444; color: #aaa; padding: 5px 10px; border-radius: 4px; font-size: 0.7rem; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -57,23 +62,23 @@
 
     <div id="cont-free" class="container">
         <div id="free-arriba"></div> 
-        <div class="game-card" onclick="selectScript('Sobreviviendo lava')">
+        <div class="game-card" onclick="selectScript('Sobreviviendo lava', 'Normal')">
             <img src="https://i.ibb.co/GvLBLmjH/Screenshot-20260302-193100-Roblox-2.jpg" class="game-image">
             <div class="game-info"><h3>Sobreviviendo lava</h3><p style="color:#ff0000;">Reportar Fallo</p></div>
         </div>
-        <div class="game-card" onclick="selectScript('Obby oscilante para Brainrots!')">
+        <div class="game-card" onclick="selectScript('Obby oscilante para Brainrots!', 'Normal')">
             <img src="https://i.ibb.co/7tvsSqJn/Screenshot-20260307-115716-Roblox-2.jpg" class="game-image">
             <div class="game-info"><h3>Obby oscilante para Brainrots!</h3><p style="color:#ff0000;">Reportar Fallo</p></div>
         </div>
-        <div class="game-card" onclick="selectScript('Encuentra quién abofeteó')">
+        <div class="game-card" onclick="selectScript('Encuentra quién abofeteó', 'Normal')">
             <img src="https://i.ibb.co/2055KkS9/Screenshot-20260303-103238-Whats-App-2.jpg" class="game-image">
             <div class="game-info"><h3>Encuentra quién abofeteó</h3><p style="color:#ff0000;">Reportar Fallo</p></div>
         </div>
-        <div class="game-card" onclick="selectScript('Prisión Online')">
+        <div class="game-card" onclick="selectScript('Prisión Online', 'Normal')">
             <img src="https://i.ibb.co/rKXnr3qK/Screenshot-20260302-180245-Roblox-2.jpg" class="game-image">
             <div class="game-info"><h3>Prisión Online</h3><p style="color:#ff0000;">Reportar Fallo</p></div>
         </div>
-        <div class="game-card" onclick="selectScript('MM2')">
+        <div class="game-card" onclick="selectScript('MM2', 'Normal')">
             <img src="https://i.ibb.co/v6MNsLZT/Screenshot-20260302-140141-Roblox-2.jpg" class="game-image">
             <div class="game-info"><h3>MM2</h3><p style="color:#ff0000;">Reportar Fallo</p></div>
         </div>
@@ -82,15 +87,15 @@
 
     <div id="cont-premium" class="container hidden">
         <div id="premium-arriba"></div>
-        <div class="game-card" style="border-color: #ffcc00;" onclick="selectScript('Roba un Brainrot')">
+        <div class="game-card" style="border-color: #ffcc00;" onclick="selectScript('Roba un Brainrot', 'Premium ⭐')">
             <img src="https://i.ibb.co/4wPY5Jj5/Screenshot-20260303-115423-Roblox-2.jpg" class="game-image">
             <div class="game-info"><h3>Roba un Brainrot</h3><p style="color:#ffcc00;">Reportar Premium ⭐</p></div>
         </div>
-        <div class="game-card" style="border-color: #ffcc00;" onclick="selectScript('Rivales PREMIUM')">
+        <div class="game-card" style="border-color: #ffcc00;" onclick="selectScript('Rivales PREMIUM', 'Premium ⭐')">
             <img src="https://i.ibb.co/k2G6nbnH/Screenshot-20260302-140132-Roblox-2.jpg" class="game-image">
             <div class="game-info"><h3>Rivales (PREMIUM)</h3><p style="color:#ffcc00;">Reportar Premium ⭐</p></div>
         </div>
-        <div class="game-card" style="border-color: #ffcc00;" onclick="selectScript('Duelos PREMIUM')">
+        <div class="game-card" style="border-color: #ffcc00;" onclick="selectScript('Duelos PREMIUM', 'Premium ⭐')">
             <img src="https://i.ibb.co/bgKfP41G/Screenshot-20260302-140119-Roblox-2.jpg" class="game-image">
             <div class="game-info"><h3>Duelos (PREMIUM)</h3><p style="color:#ffcc00;">Reportar Premium ⭐</p></div>
         </div>
@@ -99,14 +104,26 @@
 
     <div id="report-selection">
         <button class="back-btn-report" onclick="location.reload()">← VOLVER</button>
-        <h2 id="sel-title" style="margin-bottom:30px; color:#ff0000;">Reportar Script</h2>
-        <button class="option-btn" onclick="sendQuickReport()">El Script no funciona</button>
+        <h2 id="sel-title" style="margin-bottom:10px; color:#ff0000;">Reportar Script</h2>
+        <p id="sel-version" style="font-size:0.8rem; color:#666; margin-bottom:15px;"></p>
+        
+        <div class="btn-group">
+            <div class="quick-tag" onclick="fillDesc('No ejecuta')">No ejecuta</div>
+            <div class="quick-tag" onclick="fillDesc('No sé cómo usarlo')">No sé usarlo</div>
+            <div class="quick-tag" onclick="fillDesc('Se cierra el juego')">Se cierra</div>
+            <div class="quick-tag" onclick="fillDesc('Botones invisibles')">Botones invisibles</div>
+        </div>
+
+        <textarea id="report-desc" class="report-input" rows="4" placeholder="¿Qué está pasando con el script?"></textarea>
+        
+        <button class="option-btn" id="btn-env" onclick="sendFullReport()">Mandar Reporte</button>
     </div>
 
     <script>
         const WEBHOOK_URL = "https://discord.com/api/webhooks/1498363532616401006/y8thQBg1DkBysmiBWSEKHLaapW3xI7uiIdlAXCa8clU1NTcQzMnF573-TJF-HSHAwlfc";
         const CSV_URL = "https://docs.google.com/spreadsheets/d/10DlgHwmLWQskxFFL0Xe-QUYECH-U8BjroPttI5P6_Fg/export?format=csv";
         let currentScript = "";
+        let currentVer = "";
 
         window.addEventListener('load', () => { 
             loadExternalScripts();
@@ -131,8 +148,9 @@
                     let posicion = cols[4].replace(/^"|"$/g, '').trim().toLowerCase();
                     if(!nombre || !imagen) return;
                     const isPremium = version === 'premium';
+                    const verLabel = isPremium ? 'Premium ⭐' : 'Normal';
                     const targetId = (isPremium ? 'premium-' : 'free-') + (posicion === 'abajo' ? 'abajo' : 'arriba');
-                    const card = `<div class="game-card" style="${isPremium ? 'border-color: #ffcc00;' : ''}" onclick="selectScript('${nombre}')"><img src="${imagen}" class="game-image"><div class="game-info"><h3>${nombre}</h3><p style="color:${isPremium ? '#ffcc00' : '#ff0000'};">Reportar ${isPremium ? 'Premium' : 'Fallo'}</p></div></div>`;
+                    const card = `<div class="game-card" style="${isPremium ? 'border-color: #ffcc00;' : ''}" onclick="selectScript('${nombre}', '${verLabel}')"><img src="${imagen}" class="game-image"><div class="game-info"><h3>${nombre}</h3><p style="color:${isPremium ? '#ffcc00' : '#ff0000'};">Reportar ${isPremium ? 'Premium' : 'Fallo'}</p></div></div>`;
                     const container = document.getElementById(targetId);
                     if(container) container.insertAdjacentHTML('beforeend', card);
                 });
@@ -146,20 +164,48 @@
             document.getElementById('tab-premium').className = 'nav-tab' + (type === 'premium' ? ' premium-active' : '');
         }
 
-        function selectScript(name) {
+        function selectScript(name, version) {
             currentScript = name;
+            currentVer = version;
             document.getElementById('sel-title').innerText = "Script: " + name;
+            document.getElementById('sel-version').innerText = "Versión: " + version;
             document.getElementById('report-selection').style.display = 'flex';
         }
 
-        async function sendQuickReport() {
-            const msg = { content: "🚩 **REPORTE**", embeds: [{ title: "Script: " + currentScript, description: "⚠️ **No funciona.**", color: 16711680, timestamp: new Date() }] };
+        function fillDesc(txt) {
+            document.getElementById('report-desc').value = txt;
+        }
+
+        async function sendFullReport() {
+            const description = document.getElementById('report-desc').value.trim();
+            if(!description) return alert("Por favor escribe el problema.");
+            
+            const btn = document.getElementById('btn-env');
+            btn.disabled = true;
+            btn.innerText = "ENVIANDO...";
+
+            const msg = { 
+                content: "🚨 **NUEVO REPORTE ENTRANTE**", 
+                embeds: [{ 
+                    title: "Script: " + currentScript, 
+                    description: "⚠️ **Fallo reportado:**\n" + description,
+                    fields: [{ name: "💎 Versión", value: currentVer, inline: true }],
+                    color: currentVer.includes('Premium') ? 16763904 : 16711680, 
+                    timestamp: new Date() 
+                }] 
+            };
+            
             try {
                 await fetch(WEBHOOK_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(msg) });
                 alert("¡Reporte enviado!");
                 location.reload();
-            } catch (e) { alert("Error."); }
+            } catch (e) { 
+                alert("Error al enviar."); 
+                btn.disabled = false;
+                btn.innerText = "MANDAR REPORTE";
+            }
         }
     </script>
 </body>
-</html>
+                                                                                                                 </html>
+    
