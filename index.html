@@ -38,7 +38,6 @@
         .back-btn-report { position: absolute; top: 15px; left: 15px; background: none; border: 1px solid #333; color: #666; padding: 5px 10px; border-radius: 4px; }
         .hidden { display: none !important; }
 
-        /* Estilos nuevos inyectados sin dañar lo anterior */
         .report-input { background: #111; border: 1px solid #333; color: #fff; padding: 10px; border-radius: 5px; width: 100%; max-width: 300px; margin-bottom: 10px; font-size: 0.9rem; resize: none; }
         .btn-group { display: flex; flex-wrap: wrap; gap: 5px; justify-content: center; max-width: 300px; margin-bottom: 15px; }
         .quick-tag { background: #222; border: 1px solid #444; color: #aaa; padding: 5px 10px; border-radius: 4px; font-size: 0.7rem; cursor: pointer; }
@@ -60,47 +59,9 @@
         <div id="tab-premium" class="nav-tab" onclick="showTab('premium')">REPORTAR PREMIUM ⭐</div>
     </nav>
 
-    <div id="cont-free" class="container">
-        <div id="free-arriba"></div> 
-        <div class="game-card" onclick="selectScript('Sobreviviendo lava', 'Normal')">
-            <img src="https://i.ibb.co/GvLBLmjH/Screenshot-20260302-193100-Roblox-2.jpg" class="game-image">
-            <div class="game-info"><h3>Sobreviviendo lava</h3><p style="color:#ff0000;">Reportar Fallo</p></div>
-        </div>
-        <div class="game-card" onclick="selectScript('Obby oscilante para Brainrots!', 'Normal')">
-            <img src="https://i.ibb.co/7tvsSqJn/Screenshot-20260307-115716-Roblox-2.jpg" class="game-image">
-            <div class="game-info"><h3>Obby oscilante para Brainrots!</h3><p style="color:#ff0000;">Reportar Fallo</p></div>
-        </div>
-        <div class="game-card" onclick="selectScript('Encuentra quién abofeteó', 'Normal')">
-            <img src="https://i.ibb.co/2055KkS9/Screenshot-20260303-103238-Whats-App-2.jpg" class="game-image">
-            <div class="game-info"><h3>Encuentra quién abofeteó</h3><p style="color:#ff0000;">Reportar Fallo</p></div>
-        </div>
-        <div class="game-card" onclick="selectScript('Prisión Online', 'Normal')">
-            <img src="https://i.ibb.co/rKXnr3qK/Screenshot-20260302-180245-Roblox-2.jpg" class="game-image">
-            <div class="game-info"><h3>Prisión Online</h3><p style="color:#ff0000;">Reportar Fallo</p></div>
-        </div>
-        <div class="game-card" onclick="selectScript('MM2', 'Normal')">
-            <img src="https://i.ibb.co/v6MNsLZT/Screenshot-20260302-140141-Roblox-2.jpg" class="game-image">
-            <div class="game-info"><h3>MM2</h3><p style="color:#ff0000;">Reportar Fallo</p></div>
-        </div>
-        <div id="free-abajo"></div> 
-    </div>
+    <div id="cont-free" class="container"></div>
 
-    <div id="cont-premium" class="container hidden">
-        <div id="premium-arriba"></div>
-        <div class="game-card" style="border-color: #ffcc00;" onclick="selectScript('Roba un Brainrot', 'Premium ⭐')">
-            <img src="https://i.ibb.co/4wPY5Jj5/Screenshot-20260303-115423-Roblox-2.jpg" class="game-image">
-            <div class="game-info"><h3>Roba un Brainrot</h3><p style="color:#ffcc00;">Reportar Premium ⭐</p></div>
-        </div>
-        <div class="game-card" style="border-color: #ffcc00;" onclick="selectScript('Rivales PREMIUM', 'Premium ⭐')">
-            <img src="https://i.ibb.co/k2G6nbnH/Screenshot-20260302-140132-Roblox-2.jpg" class="game-image">
-            <div class="game-info"><h3>Rivales (PREMIUM)</h3><p style="color:#ffcc00;">Reportar Premium ⭐</p></div>
-        </div>
-        <div class="game-card" style="border-color: #ffcc00;" onclick="selectScript('Duelos PREMIUM', 'Premium ⭐')">
-            <img src="https://i.ibb.co/bgKfP41G/Screenshot-20260302-140119-Roblox-2.jpg" class="game-image">
-            <div class="game-info"><h3>Duelos (PREMIUM)</h3><p style="color:#ffcc00;">Reportar Premium ⭐</p></div>
-        </div>
-        <div id="premium-abajo"></div>
-    </div>
+    <div id="cont-premium" class="container hidden"></div>
 
     <div id="report-selection">
         <button class="back-btn-report" onclick="location.reload()">← VOLVER</button>
@@ -121,7 +82,9 @@
 
     <script>
         const WEBHOOK_URL = "https://discord.com/api/webhooks/1498363532616401006/y8thQBg1DkBysmiBWSEKHLaapW3xI7uiIdlAXCa8clU1NTcQzMnF573-TJF-HSHAwlfc";
-        const CSV_URL = "https://docs.google.com/spreadsheets/d/10DlgHwmLWQskxFFL0Xe-QUYECH-U8BjroPttI5P6_Fg/export?format=csv";
+        const VINCULO_EXCEL = "https://docs.google.com/spreadsheets/d/10DlgHwmLWQskxFFL0Xe-QUYECH-U8BjroPttI5P6_Fg/edit?usp=drivesdk";
+        const CSV_URL = VINCULO_EXCEL.split('/edit')[0] + "/export?format=csv&cachebuster=" + Date.now();
+        
         let currentScript = "";
         let currentVer = "";
 
@@ -139,20 +102,48 @@
                 const res = await fetch(CSV_URL);
                 const data = await res.text();
                 const rows = data.split("\n").slice(1);
+                
                 rows.forEach(row => {
                     const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
                     if (cols.length < 5) return;
-                    let nombre = cols[0].replace(/^"|"$/g, '').trim();
-                    let imagen = cols[1].replace(/^"|"$/g, '').trim();
-                    let version = cols[3].replace(/^"|"$/g, '').trim().toLowerCase();
-                    let posicion = cols[4].replace(/^"|"$/g, '').trim().toLowerCase();
+                    
+                    let [nombre, imagen, script, version, orden] = cols.map(c => c.replace(/^"|"$/g, '').trim());
                     if(!nombre || !imagen) return;
-                    const isPremium = version === 'premium';
+                    
+                    const isPremium = version && version.toLowerCase() === 'premium';
                     const verLabel = isPremium ? 'Premium ⭐' : 'Normal';
-                    const targetId = (isPremium ? 'premium-' : 'free-') + (posicion === 'abajo' ? 'abajo' : 'arriba');
-                    const card = `<div class="game-card" style="${isPremium ? 'border-color: #ffcc00;' : ''}" onclick="selectScript('${nombre}', '${verLabel}')"><img src="${imagen}" class="game-image"><div class="game-info"><h3>${nombre}</h3><p style="color:${isPremium ? '#ffcc00' : '#ff0000'};">Reportar ${isPremium ? 'Premium' : 'Fallo'}</p></div></div>`;
-                    const container = document.getElementById(targetId);
-                    if(container) container.insertAdjacentHTML('beforeend', card);
+                    
+                    const cardHtml = `
+                        <div class="game-card" id="card-${nombre.replace(/\s+/g, '')}" style="${isPremium ? 'border-color: #ffcc00;' : ''}" 
+                             onclick="selectScript('${nombre}', '${verLabel}')">
+                            <img src="${imagen}" class="game-image">
+                            <div class="game-info">
+                                <h3>${nombre}</h3>
+                                <p style="color:${isPremium ? '#ffcc00' : '#ff0000'};">Reportar ${isPremium ? 'Premium' : 'Fallo'}</p>
+                            </div>
+                        </div>`;
+
+                    const container = document.getElementById(isPremium ? 'cont-premium' : 'cont-free');
+                    const instruccion = orden ? orden.toLowerCase() : "";
+
+                    if (instruccion.includes("arriba de ")) {
+                        let targetName = instruccion.replace("arriba de ", "").split(" en ")[0].replace(/\s+/g, '');
+                        let targetCard = document.getElementById("card-" + targetName);
+                        if (targetCard) { targetCard.insertAdjacentHTML('beforebegin', cardHtml); } 
+                        else { container.insertAdjacentHTML('afterbegin', cardHtml); }
+                    } 
+                    else if (instruccion.includes("abajo de ")) {
+                        let targetName = instruccion.replace("abajo de ", "").split(" en ")[0].replace(/\s+/g, '');
+                        let targetCard = document.getElementById("card-" + targetName);
+                        if (targetCard) { targetCard.insertAdjacentHTML('afterend', cardHtml); } 
+                        else { container.insertAdjacentHTML('beforeend', cardHtml); }
+                    } 
+                    else if (instruccion === 'arriba') {
+                        container.insertAdjacentHTML('afterbegin', cardHtml);
+                    } 
+                    else {
+                        container.insertAdjacentHTML('beforeend', cardHtml);
+                    }
                 });
             } catch (e) { console.error("Error Excel."); }
         }
@@ -207,5 +198,4 @@
         }
     </script>
 </body>
-                                                                                                                 </html>
-    
+</html>
